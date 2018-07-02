@@ -2,16 +2,17 @@ package main
 
 import (
 	"fmt"
-	//"./DataBase"
+	"./DataBase"
 	"github.com/jinzhu/gorm"
-    _ "github.com/jinzhu/gorm/dialects/sqlite"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	//"github.com/PuerkitoBio/goquery"
+	"net/http"
 )
 
-type Tag struct{
-	gorm.Model
-	TagName string
-}
-
+const(
+	Websiteurl string="http://www.hsu.edu.cn/17/list.htm"
+	IsDBInited bool=false
+)
 
 func main(){
     db, err := gorm.Open("sqlite3", "Spider.db3")
@@ -21,25 +22,14 @@ func main(){
     
 	defer db.Close()
 
-//   if(!db.HasTable(&DataBase.Tag{})){
-// 	db.CreateTable(&DataBase.Tag{})
-//  }
-
-// if(!db.HasTable(&DataBase.Website{})){
-//    db.CreateTable(&DataBase.Website{})
-// }
-//  if(!db.HasTable(&DataBase.Article{})){
-// 	db.CreateTable(&DataBase.Article{})
-
-// }
-//db.AutoMigrate(&Tag{})
-db.AutoMigrate(&Tag{})
-
-
-//db.Create(&Product{Code: "L1212", Price: 1000})
-
-
-
-
+db.AutoMigrate(&DataBase.Tag{},&DataBase.Website{},&DataBase.Article{})
   fmt.Println("初始化数据库完成...")
+}
+
+func getResponse(url string) *http.Response {
+    client := &http.Client{}
+    request, _ := http.NewRequest("GET", url, nil)
+    request.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0")
+	response, _ := client.Do(request)
+    return response
 }
