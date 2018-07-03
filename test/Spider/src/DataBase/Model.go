@@ -13,8 +13,8 @@ type Article struct{
     Content string
 	ReleaseTime time.Time
 	URL string
-	Website Website `gorm:"ForeignKey:WebsiteID"`
-	WebsiteID int
+	//Website Website `gorm:"ForeignKey:WebsiteID"`
+	//WebsiteID int
 	//Tags []Tag
 }
 
